@@ -1,0 +1,24 @@
+{
+    "name": "aliirfaan/laravel-simple-audit-log",
+    "description": "This package creates a database table to save audit logs and exposes events to log user actions.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "aliirfaan",
+            "email": "aliirfaan.freelance@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "aliirfaan\\LaravelSimpleAuditLog\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "aliirfaan\\LaravelSimpleAuditLog\\SimpleAuditLogProvider"
+            ]
+        }
+    }
+}
