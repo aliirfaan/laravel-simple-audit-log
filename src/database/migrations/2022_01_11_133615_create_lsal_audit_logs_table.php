@@ -28,6 +28,7 @@ class CreateLsalAuditLogsTable extends Migration
             $table->string('al_target_id')->nullable()->index('al_target_id_index')->comment('The ID of the resource that is being accessed.');
             $table->string('al_action_type', 255)->nullable()->index('al_action_type_index')->comment('CRUD: Read, write, update, delete');
             $table->string('al_event_name', 255)->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
+            $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
             $table->text('al_previous_value')->nullable();
             $table->text('al_new_value')->nullable();
             $table->text('al_request')->nullable()->comment('Request information.');

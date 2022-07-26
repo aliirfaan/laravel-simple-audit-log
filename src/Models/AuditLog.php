@@ -21,6 +21,7 @@ class AuditLog extends Model
         'al_target_id', 
         'al_action_type', 
         'al_event_name', 
+        'al_correlation_id',
         'al_previous_value', 
         'al_new_value', 
         'al_request', 

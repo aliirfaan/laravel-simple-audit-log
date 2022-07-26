@@ -10,50 +10,34 @@ Many systems need to log user actions for auditing purposes. This package create
 ## Table fields
 This is only a dump to explain fields. Table will be created via Laravel migration file.
 
-```sql
-CREATE TABLE `lsal_audit_logs` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `al_date_time_local` datetime NOT NULL COMMENT 'Timestamp in local timezone.',
-  `al_date_time_utc` datetime DEFAULT NULL,
-  `al_actor_id` varchar(255) DEFAULT NULL COMMENT 'User id in application. Can be null in cases where an action is performed programmatically.',
-  `al_actor_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Actor type in application. Useful if you are logging multiple types of users. Example: admin, user, guest',
-  `al_actor_global_uid` varchar(255) DEFAULT NULL COMMENT 'User id if using a single sign on facility.',
-  `al_actor_username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Username in application.',
-  `al_actor_group` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User role/group in application.',
-  `al_device_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Device identifier.',
-  `al_target_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'The object or underlying resource that is being accessed. Example: user.',
-  `al_target_id` varchar(255) DEFAULT NULL COMMENT 'The ID of the resource that is being accessed.',
-  `al_action_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CRUD: Read, write, update, delete',
-  `al_event_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout',
-  `al_previous_value` text COLLATE utf8mb4_unicode_ci,
-  `al_new_value` text COLLATE utf8mb4_unicode_ci,
-  `al_request` text COLLATE utf8mb4_unicode_ci COMMENT 'Request information.',
-  `al_response` text COLLATE utf8mb4_unicode_ci COMMENT 'Response information.',
-  `al_custom_field_1` text COLLATE utf8mb4_unicode_ci,
-  `al_custom_field_2` text COLLATE utf8mb4_unicode_ci,
-  `al_custom_field_3` text COLLATE utf8mb4_unicode_ci,
-  `al_ip_addr` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `al_server` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Server ids or names, server location. Example: uat, production, testing, 192.168.2.10',
-  `al_version` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Version of the code/release that is sending the events.',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `al_date_time_local_index` (`al_date_time_local`),
-  KEY `al_date_time_utc_index` (`al_date_time_utc`),
-  KEY `al_actor_id_index` (`al_actor_id`),
-  KEY `al_actor_type_index` (`al_actor_type`),
-  KEY `al_actor_global_uid_index` (`al_actor_global_uid`),
-  KEY `al_actor_username_index` (`al_actor_username`),
-  KEY `al_actor_group_index` (`al_actor_group`),
-  KEY `al_device_id_index` (`al_device_id`),
-  KEY `al_target_name_index` (`al_target_name`),
-  KEY `al_target_id_index` (`al_target_id`),
-  KEY `al_action_type_index` (`al_action_type`),
-  KEY `al_event_name_index` (`al_event_name`),
-  KEY `al_ip_addr_index` (`al_ip_addr`),
-  KEY `al_server_index` (`al_server`),
-  KEY `al_version_index` (`al_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```php
+Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('lsal_audit_logs', function (Blueprint $table) {
+    $table->id();
+    $table->dateTime('al_date_time_local', $precision = 0)->index('al_date_time_local_index')->comment('Timestamp in local timezone.');
+    $table->dateTime('al_date_time_utc', $precision = 0)->nullable()->index('al_date_time_utc_index');
+    $table->string('al_actor_id')->nullable()->index('al_actor_id_index')->comment('User id in application. Can be null in cases where an action is performed programmatically.');
+    $table->string('al_actor_type', 255)->nullable()->index('al_actor_type_index')->comment('Actor type in application. Useful if you are logging multiple types of users. Example: admin, user, guest');
+    $table->string('al_actor_global_uid')->nullable()->index('al_actor_global_uid_index')->comment('User id if using a single sign on facility.');
+    $table->string('al_actor_username', 255)->nullable()->index('al_actor_username_index')->comment('Username in application.');
+    $table->string('al_actor_group', 255)->nullable()->index('al_actor_group_index')->comment('User role/group in application.');
+    $table->string('al_device_id', 255)->nullable()->index('al_device_id_index')->comment('Device identifier.');
+    $table->string('al_target_name', 255)->nullable()->index('al_target_name_index')->comment('The object or underlying resource that is being accessed. Example: user.');
+    $table->string('al_target_id')->nullable()->index('al_target_id_index')->comment('The ID of the resource that is being accessed.');
+    $table->string('al_action_type', 255)->nullable()->index('al_action_type_index')->comment('CRUD: Read, write, update, delete');
+    $table->string('al_event_name', 255)->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
+    $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
+    $table->text('al_previous_value')->nullable();
+    $table->text('al_new_value')->nullable();
+    $table->text('al_request')->nullable()->comment('Request information.');
+    $table->text('al_response')->nullable()->comment('Response information.');
+    $table->text('al_custom_field_1')->nullable()->index('al_custom_field_1_index');
+    $table->text('al_custom_field_2')->nullable()->index('al_custom_field_2_index');
+    $table->text('al_custom_field_3')->nullable()->index('al_custom_field_3_index');
+    $table->ipAddress('al_ip_addr')->nullable()->index('al_ip_addr_index');
+    $table->string('al_server', 255)->nullable()->index('al_server_index')->comment('Server ids or names, server location. Example: uat, production, testing, 192.168.2.10');
+    $table->string('al_version', 255)->nullable()->index('al_version_index')->comment('Version of the code/release that is sending the events.');
+    $table->timestamps();
+});
 ```
 ## Events
 You can dispatch these events to record logs. You can also listen to these events if you want additional processing.
