@@ -6,6 +6,7 @@ Many systems need to log user actions for auditing purposes. This package create
 * Table structure to keep audit logs
 * Event driven
 * Configurable connection if using a different database for recording logs
+* Configurable model
 
 ## Table fields
 This is only a dump to explain fields. Table will be created via Laravel migration file.
@@ -137,7 +138,7 @@ class TestController extends Controller
 
 ### Custom model
 
-You have have additional requirements for our audit logs. In this case, you can add columns using migation and use a custom model to use your new columns.
+If you have have additional requirements for our audit logs, you can add columns using migation and use a custom model to use your new columns.
 
 Add your custom model to the configuration file.
 
