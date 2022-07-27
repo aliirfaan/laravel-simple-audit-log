@@ -12,8 +12,8 @@ This is only a dump to explain fields. Table will be created via Laravel migrati
 
 ```php
 Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('lsal_audit_logs', function (Blueprint $table) {
-    $table->id();
     $table->dateTime('al_date_time_local', $precision = 0)->index('al_date_time_local_index')->comment('Timestamp in local timezone.');
+    $table->id();
     $table->dateTime('al_date_time_utc', $precision = 0)->nullable()->index('al_date_time_utc_index');
     $table->string('al_actor_id')->nullable()->index('al_actor_id_index')->comment('User id in application. Can be null in cases where an action is performed programmatically.');
     $table->string('al_actor_type', 255)->nullable()->index('al_actor_type_index')->comment('Actor type in application. Useful if you are logging multiple types of users. Example: admin, user, guest');
@@ -26,13 +26,14 @@ Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('
     $table->string('al_action_type', 255)->nullable()->index('al_action_type_index')->comment('CRUD: Read, write, update, delete');
     $table->string('al_event_name', 255)->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
     $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
+    $table->string('al_parent_correlation_id', 255)->nullable()->index('al_parent_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
+    $table->tinyInteger('al_is_success')->nullable()->default(0)->index('al_is_success_index');
+    $table->text('al_meta')->nullable();
+    $table->text('al_message')->nullable();
     $table->text('al_previous_value')->nullable();
     $table->text('al_new_value')->nullable();
     $table->text('al_request')->nullable()->comment('Request information.');
     $table->text('al_response')->nullable()->comment('Response information.');
-    $table->text('al_custom_field_1')->nullable()->index('al_custom_field_1_index');
-    $table->text('al_custom_field_2')->nullable()->index('al_custom_field_2_index');
-    $table->text('al_custom_field_3')->nullable()->index('al_custom_field_3_index');
     $table->ipAddress('al_ip_addr')->nullable()->index('al_ip_addr_index');
     $table->string('al_server', 255)->nullable()->index('al_server_index')->comment('Server ids or names, server location. Example: uat, production, testing, 192.168.2.10');
     $table->string('al_version', 255)->nullable()->index('al_version_index')->comment('Version of the code/release that is sending the events.');
@@ -93,7 +94,12 @@ The database connection to use. Defaults to environment variable 'DB_CONNECTION'
 ```php
 'audit_log_db_connection' => env('AUDIT_LOG_DB_CONNECTION', env('DB_CONNECTION'))
 ```
+audit_log_model | String
+The model you want to use. The model must implement aliirfaan\LaravelSimpleAuditLog\Contracts\SimpleAuditLog
 
+```php
+'audit_log_model' => aliirfaan\LaravelSimpleAuditLog\Models\SimpleAuditLog::class,
+```
 ## Usage
 
 ```php
@@ -127,6 +133,39 @@ class TestController extends Controller
         }
     }
 }
+```
+
+### Custom model
+
+You have have additional requirements for our audit logs. In this case, you can add columns using migation and use a custom model to use your new columns.
+
+Add your custom model to the configuration file.
+
+```php
+<?php
+
+namespace App\Models\AuditLog;
+
+use Illuminate\Database\Eloquent\Model;
+use aliirfaan\LaravelSimpleAuditLog\Contracts\SimpleAuditLog as SimpleAuditLogContract;
+use aliirfaan\LaravelSimpleAuditLog\Models\SimpleAuditLog;
+
+// custom class that extends base model and implements contract
+class AuditLog extends SimpleAuditLog implements SimpleAuditLogContract
+{
+    public function __construct(array $attributes = [])
+    {
+        // add your additional columns to the fillable property
+        $this->mergeFillable(['al_custom_field_1']);
+        
+        parent::__construct($attributes);
+    }
+}
+```
+
+Specify custom model to configuration file
+```php
+'audit_log_model' => App\Models\AuditLog\AuditLog::class,
 ```
 
 ## License

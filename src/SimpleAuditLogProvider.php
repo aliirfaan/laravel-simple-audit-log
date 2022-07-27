@@ -4,6 +4,7 @@ namespace aliirfaan\LaravelSimpleAuditLog;
 
 use Illuminate\Support\ServiceProvider;
 use aliirfaan\LaravelSimpleAuditLog\Providers\EventServiceProvider;
+use aliirfaan\LaravelSimpleAuditLog\Contracts\SimpleAuditLog as SimpleAuditLogContract;
 
 class SimpleAuditLogProvider extends ServiceProvider
 {
@@ -29,5 +30,18 @@ class SimpleAuditLogProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/simple-audit-log.php' => config_path('simple-audit-log.php'),
         ]);
+
+        $this->registerModelBindings();
+    }
+
+    protected function registerModelBindings()
+    {
+        $config = $this->app->config['simple-audit-log'];
+
+        if (! $config) {
+            return;
+        }
+
+        $this->app->bind(SimpleAuditLogContract::class,  $config['audit_log_model']);
     }
 }

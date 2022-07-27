@@ -4,12 +4,15 @@ namespace aliirfaan\LaravelSimpleAuditLog\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 use aliirfaan\LaravelSimpleAuditLog\Events\AuditLogged;
-use aliirfaan\LaravelSimpleAuditLog\Models\AuditLog;
 
 class AuditLogSubscriber
 {
+    private $model;
+
     /**
      * Create the event listener.
      *
@@ -17,7 +20,7 @@ class AuditLogSubscriber
      */
     public function __construct()
     {
-        //
+        $this->model = app(config('simple-audit-log.audit_log_model'));
     }
 
     public function handleAuditLogEvent($event)
@@ -30,7 +33,7 @@ class AuditLogSubscriber
 
         try {
             $eventData = $event->eventData;
-            $insertLog = AuditLog::create($eventData);
+            $insertLog = $this->model::create($eventData);
         } catch (\Exception $e) {
             report($e);
     

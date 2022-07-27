@@ -3,6 +3,38 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 4.0.0 - 2022-07-27
+
+### Added
+
+- al_parent_correlation_id, al_is_success, al_meta, al_message columns
+- audit_log_model config to use custom model
+- Contracts\SimpleAuditLog
+
+### Changed
+
+- migration file
+- al_parent_correlation_id for easy joining with other tables/microservices
+- al_is_success
+- al_meta
+- al_message
+- AuditLog Model
+- config file
+- AuditLogSubscriber - use model set in config
+- renamed model to SimpleAuditLog
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- all custom fields as we can extend the model and add column using custom migration
+
+### Fixed
+
+- Nothing
+
 ## 3.0.0 - 2022-07-26
 
 ### Added

@@ -29,13 +29,14 @@ class CreateLsalAuditLogsTable extends Migration
             $table->string('al_action_type', 255)->nullable()->index('al_action_type_index')->comment('CRUD: Read, write, update, delete');
             $table->string('al_event_name', 255)->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
             $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
+            $table->string('al_parent_correlation_id', 255)->nullable()->index('al_parent_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
+            $table->tinyInteger('al_is_success')->nullable()->default(0)->index('al_is_success_index');
+            $table->text('al_meta')->nullable();
+            $table->text('al_message')->nullable();
             $table->text('al_previous_value')->nullable();
             $table->text('al_new_value')->nullable();
             $table->text('al_request')->nullable()->comment('Request information.');
             $table->text('al_response')->nullable()->comment('Response information.');
-            $table->text('al_custom_field_1')->nullable()->index('al_custom_field_1_index');
-            $table->text('al_custom_field_2')->nullable()->index('al_custom_field_2_index');
-            $table->text('al_custom_field_3')->nullable()->index('al_custom_field_3_index');
             $table->ipAddress('al_ip_addr')->nullable()->index('al_ip_addr_index');
             $table->string('al_server', 255)->nullable()->index('al_server_index')->comment('Server ids or names, server location. Example: uat, production, testing, 192.168.2.10');
             $table->string('al_version', 255)->nullable()->index('al_version_index')->comment('Version of the code/release that is sending the events.');
