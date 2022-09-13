@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 5.0.0 - 2022-09-13
+
+### Added
+
+- Nothing
+
+### Changed
+
+- Path for config and database
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
 ## 4.0.0 - 2022-07-27
 
 ### Added
