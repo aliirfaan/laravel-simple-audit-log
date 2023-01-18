@@ -34,6 +34,10 @@ class AuditLogSubscriber
         try {
             $eventData = $event->eventData;
             $insertLog = $this->model::create($eventData);
+            if ($insertLog) {
+                $data['success'] = true;
+                $data['message'] = 'Audit log successfully saved.';
+            }
         } catch (\Exception $e) {
             report($e);
     
