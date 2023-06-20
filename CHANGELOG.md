@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com) and this p
 
 ### Fixed
 
-- AuditLogSubscriber handleAuditLogEvent($event) set data['success'] to true on model create success
+- Nothing
 
 ## 5.0.1 - 2023-01-18
 
