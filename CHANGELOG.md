@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 6.0.0 - 2023-06-20
+
+### Added
+
+- config should_prune - whether to enable pruning
+- config prune_month - to delete records older than prune_months
+
+### Changed
+
+- class SimpleAuditLog
+- config file simple-audit-log.php
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- AuditLogSubscriber handleAuditLogEvent($event) set data['success'] to true on model create success
+
 ## 5.0.1 - 2023-01-18
 
 ### Added

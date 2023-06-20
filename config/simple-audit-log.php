@@ -14,8 +14,16 @@ return [
     |
     | audit_log_model | String
     | The model you want to use. The model must implement aliirfaan\LaravelSimpleAuditLog\Contracts\SimpleAuditLog
+    |
+    | should_prune | Bool
+    | Whether to prune
+    |
+    | prune_month | Numeric
+    | Prune month
     */
 
     'audit_log_db_connection' => env('AUDIT_LOG_DB_CONNECTION', env('DB_CONNECTION')),
     'audit_log_model' => aliirfaan\LaravelSimpleAuditLog\Models\SimpleAuditLog::class,
+    'should_prune' => env('AUDIT_LOG_SHOULD_PRUNE', false),
+    'prune_month' => env('AUDIT_LOG_PRUNE_MONTH', 3)
 ];

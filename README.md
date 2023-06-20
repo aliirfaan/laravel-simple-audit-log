@@ -101,6 +101,20 @@ The model you want to use. The model must implement aliirfaan\LaravelSimpleAudit
 ```php
 'audit_log_model' => aliirfaan\LaravelSimpleAuditLog\Models\SimpleAuditLog::class,
 ```
+
+should_prune | Boolean
+Whether to prune records
+
+```php
+'should_prune' => env('AUDIT_LOG_SHOULD_PRUNE', false),
+```
+
+prune_month | Numeric
+to delete records older than prune_months
+
+```php
+'prune_month' => env('AUDIT_LOG_PRUNE_MONTH', 3)
+```
 ## Usage
 
 ```php
