@@ -36,7 +36,8 @@ class SimpleAuditLog extends Model implements SimpleAuditLogContract
         'al_response',
         'al_ip_addr',
         'al_server',
-        'al_version'
+        'al_version',
+        'al_log_level'
     ];
 
     public function __construct(array $attributes = [])

@@ -38,6 +38,7 @@ Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('
     $table->ipAddress('al_ip_addr')->nullable()->index('al_ip_addr_index');
     $table->string('al_server', 255)->nullable()->index('al_server_index')->comment('Server ids or names, server location. Example: uat, production, testing, 192.168.2.10');
     $table->string('al_version', 255)->nullable()->index('al_version_index')->comment('Version of the code/release that is sending the events.');
+    $table->string('al_log_level', 10)->nullable()->index('al_log_level_index')->comment('Log level.');
     $table->timestamps();
 });
 ```
