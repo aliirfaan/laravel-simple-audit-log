@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 8.0.0 - 2024-05-13
+
+### Added
+
+- Nothing
+
+### Changed
+
+- al_code column to migration
+- src\Models\SimpleAuditLog.php - added column to fillable
+- README.md
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
 ## 7.0.0 - 2024-05-07
 
 ### Added
