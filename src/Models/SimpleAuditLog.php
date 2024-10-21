@@ -13,8 +13,7 @@ class SimpleAuditLog extends Model implements SimpleAuditLogContract
     protected $table = 'lsal_audit_logs';
 
     protected $fillable = [
-        'al_date_time_local',
-        'al_date_time_utc',
+        'al_date_time',
         'al_actor_id',
         'al_actor_type',
         'al_actor_global_uid',
@@ -51,7 +50,7 @@ class SimpleAuditLog extends Model implements SimpleAuditLogContract
     public function prunable()
     {
         if (config('simple-audit-log.should_prune')) {
-            return static::where('created_at', '<=', now()->subMonths(intval(config('simple-audit-log.prune_month'))));
+            return static::where('created_at', '<=', now()->subDays(intval(config('simple-audit-log.prune_days'))));
         }
     }
 }

@@ -18,12 +18,12 @@ return [
     | should_prune | Bool
     | Whether to prune
     |
-    | prune_month | Numeric
-    | Prune month
+    | prune_days | Numeric
+    | Prune days
     */
 
     'audit_log_db_connection' => env('AUDIT_LOG_DB_CONNECTION', env('DB_CONNECTION')),
     'audit_log_model' => aliirfaan\LaravelSimpleAuditLog\Models\SimpleAuditLog::class,
     'should_prune' => env('AUDIT_LOG_SHOULD_PRUNE', false),
-    'prune_month' => env('AUDIT_LOG_PRUNE_MONTH', 3)
+    'prune_days' => env('AUDIT_LOG_PRUNE_DAYS', 30),
 ];

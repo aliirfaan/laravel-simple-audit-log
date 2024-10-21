@@ -3,6 +3,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 9.0.0 - 2024-10-21
+
+### Added
+
+- Nothing
+
+### Changed
+
+- renamed column al_date_time_local to al_date_time
+- make column al_event_name nullable
+- change pruning configuration from month to days
+- migration file: 2022_01_11_133615_create_lsal_audit_logs_table.php
+- model
+- configuration
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- removed column al_date_time_utc
+
+### Fixed
+
+- Nothing
+
 ## 8.0.0 - 2024-05-13
 
 ### Added

@@ -13,9 +13,8 @@ This is only a dump to explain fields. Table will be created via Laravel migrati
 
 ```php
 Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('lsal_audit_logs', function (Blueprint $table) {
-    $table->dateTime('al_date_time_local', $precision = 0)->index('al_date_time_local_index')->comment('Timestamp in local timezone.');
     $table->id();
-    $table->dateTime('al_date_time_utc', $precision = 0)->nullable()->index('al_date_time_utc_index');
+    $table->dateTime('al_date_time', $precision = 0)->index('al_date_time_index');
     $table->string('al_actor_id')->nullable()->index('al_actor_id_index')->comment('User id in application. Can be null in cases where an action is performed programmatically.');
     $table->string('al_actor_type', 255)->nullable()->index('al_actor_type_index')->comment('Actor type in application. Useful if you are logging multiple types of users. Example: admin, user, guest');
     $table->string('al_actor_global_uid')->nullable()->index('al_actor_global_uid_index')->comment('User id if using a single sign on facility.');
@@ -25,7 +24,7 @@ Schema::connection(config('simple-audit-log.audit_log_db_connection'))->create('
     $table->string('al_target_name', 255)->nullable()->index('al_target_name_index')->comment('The object or underlying resource that is being accessed. Example: user.');
     $table->string('al_target_id')->nullable()->index('al_target_id_index')->comment('The ID of the resource that is being accessed.');
     $table->string('al_action_type', 255)->nullable()->index('al_action_type_index')->comment('CRUD: Read, write, update, delete');
-    $table->string('al_event_name', 255)->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
+    $table->string('al_event_name', 255)->nullable()->index('al_event_name_index')->comment('Common name for the event that can be used to filter down to similar events. Example: user.login.success, user.login.failure, user.logout');
     $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
     $table->string('al_parent_correlation_id', 255)->nullable()->index('al_parent_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
     $table->tinyInteger('al_is_success')->nullable()->default(0)->index('al_is_success_index');
@@ -111,11 +110,11 @@ Whether to prune records
 'should_prune' => env('AUDIT_LOG_SHOULD_PRUNE', false),
 ```
 
-prune_month | Numeric
-to delete records older than prune_months
+prune_days | Numeric
+to delete records older than prune_days
 
 ```php
-'prune_month' => env('AUDIT_LOG_PRUNE_MONTH', 3)
+'prune_days' => env('AUDIT_LOG_PRUNE_DAYS', 30),
 ```
 ## Usage
 
@@ -135,8 +134,7 @@ class TestController extends Controller
 
             // log access after operation
             $eventData = [
-                'al_date_time_local'=> date('Y-m-d H:i:s'),
-                'al_date_time_utc'=> date('Y-m-d H:i:s'),
+                'al_date_time'=> date('Y-m-d H:i:s'),
                 'al_actor_id'=> 5,
                 'al_event_name'=> 'user.login.success',
                 'al_ip_addr'=> $request->ip()
