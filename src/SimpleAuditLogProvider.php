@@ -5,6 +5,7 @@ namespace aliirfaan\LaravelSimpleAuditLog;
 use Illuminate\Support\ServiceProvider;
 use aliirfaan\LaravelSimpleAuditLog\Providers\EventServiceProvider;
 use aliirfaan\LaravelSimpleAuditLog\Contracts\SimpleAuditLog as SimpleAuditLogContract;
+use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
 
 class SimpleAuditLogProvider extends ServiceProvider
 {
@@ -16,6 +17,10 @@ class SimpleAuditLogProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(EventServiceProvider::class);
+
+        $this->app->bind('aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService', function ($app) {
+            return new AuditLogService();
+        });
     }
 
     /**

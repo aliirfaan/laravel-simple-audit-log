@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 9.1.0 - 2024-10-25
+
+### Added
+
+- AuditLogService
+
+### Changed
+
+- SimpleAuditLogProvider
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
 ## 9.0.0 - 2024-10-21
 
 ### Added

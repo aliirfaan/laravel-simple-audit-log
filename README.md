@@ -7,6 +7,8 @@ Many systems need to log user actions for auditing purposes. This package create
 * Event driven
 * Configurable connection if using a different database for recording logs
 * Configurable model
+* Audit log service
+* log request ip, app environment
 
 ## Table fields
 This is only a dump to explain fields. Table will be created via Laravel migration file.
@@ -125,23 +127,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use aliirfaan\LaravelSimpleAuditLog\Events\AuditLogged; // event you want to dispatch
+use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
 
 class TestController extends Controller
 {
-    public function test(Request $request)
+    public function test(Request $request, AuditLogService $auditLogService)
     {
         try {
 
+            // you can use service to get preliminary audit data
+            $correlationToken = 'a-token';
+            $actor = null;
+            $auditData = $auditLogService->generatePreliminaryAuditData($request, $correlationToken, $actor);
+
             // log access after operation
             $eventData = [
-                'al_date_time'=> date('Y-m-d H:i:s'),
-                'al_actor_id'=> 5,
-                'al_event_name'=> 'user.login.success',
-                'al_ip_addr'=> $request->ip()
+                'al_is_success'=> true,
+                'al_code' => 'a-code'
             ];
+            $auditData = array_merge($auditData, $eventData);
 
             // dispatch event
-            AuditLogged::dispatch($eventData);
+            AuditLogged::dispatch($auditData);
 
         } catch (\Exception $e) {
             report($e);
