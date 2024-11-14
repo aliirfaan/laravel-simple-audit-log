@@ -27,7 +27,8 @@ class AuditLogService
             'al_actor_id' => $actorId,
             'al_ip_addr' => $ipAddr,
             'al_server' => $environment,
-            'al_correlation_id' => $correlationId
+            'al_correlation_id' => $correlationId,
+            'al_url' => ($request !== null) ? $request->fullUrl() : null,
         ];
     }
 }

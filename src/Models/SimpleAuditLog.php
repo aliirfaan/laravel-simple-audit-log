@@ -27,6 +27,7 @@ class SimpleAuditLog extends Model implements SimpleAuditLogContract
         'al_correlation_id',
         'al_parent_correlation_id',
         'al_is_success',
+        'al_url',
         'al_meta',
         'al_message',
         'al_previous_value',

@@ -30,6 +30,7 @@ class CreateLsalAuditLogsTable extends Migration
             $table->string('al_correlation_id', 255)->nullable()->index('al_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
             $table->string('al_parent_correlation_id', 255)->nullable()->index('al_parent_correlation_id_index')->comment('Correlation id for easy traceability and joining with other tables.');
             $table->tinyInteger('al_is_success')->nullable()->default(0)->index('al_is_success_index');
+            $table->text('al_url')->nullable();
             $table->text('al_meta')->nullable();
             $table->text('al_message')->nullable();
             $table->text('al_previous_value')->nullable();
